@@ -46,7 +46,19 @@ export default function Post() {
       <div className="post-page py-8">
         <h1 className="text-4xl font-bold mb-4">{postData.title}</h1>
         <p className="text-gray-500 mb-12">{postData.date} • {postData.readTime}</p>
-        <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+        <div 
+          className="prose prose-lg dark:prose-invert max-w-none
+          prose-headings:font-bold 
+          prose-h1:text-3xl
+          prose-h2:text-2xl 
+          prose-h3:text-xl
+          prose-p:text-gray-600 dark:prose-p:text-gray-300
+          prose-blockquote:border-l-4 prose-blockquote:border-gray-300 dark:prose-blockquote:border-gray-700
+          prose-blockquote:pl-4 prose-blockquote:italic
+          prose-ul:list-disc prose-ul:ml-4
+          prose-ol:list-decimal prose-ol:ml-4"          
+          dangerouslySetInnerHTML={{ __html: postData.contentHtml }} 
+        />
       </div>
     </Layout>
   );

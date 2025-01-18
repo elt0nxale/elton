@@ -6,11 +6,13 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    if (!params?.id) {
+    const resolvedParams = await Promise.resolve(params);
+    
+    if (!resolvedParams?.id) {
       return Response.json({ error: 'Missing post ID' }, { status: 400 });
     }
 
-    const post = await getPostMetadata(params.id, true);
+    const post = await getPostMetadata(resolvedParams.id, true);
     return Response.json(post);
   } catch (error) {
     console.error('Error fetching post:', error);

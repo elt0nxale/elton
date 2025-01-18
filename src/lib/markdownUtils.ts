@@ -1,8 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { remark } from 'remark';
-import html from 'remark-html';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import remarkRehype from 'remark-rehype';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeKatex from 'rehype-katex';
+import rehypeStringify from 'rehype-stringify';
 import { format } from 'date-fns';
 
 const WORDS_PER_MINUTE = 265;
@@ -32,14 +40,29 @@ function calculateReadTime(content: string): string {
          `${totalMinutes} min read`;
 }
 
+async function processMarkdown(content: string): Promise<string> {
+  const processedContent = await unified()
+    .use(remarkParse)
+    .use(remarkGfm)
+    .use(remarkMath)
+    .use(remarkRehype)
+    .use(rehypeSlug)
+    .use(rehypeAutolinkHeadings)
+    .use(rehypeHighlight)
+    .use(rehypeKatex)
+    .use(rehypeStringify)
+    .process(content);
+
+  return processedContent.toString();
+}
+
 export async function getPostMetadata(id: string, includeContent = false): Promise<PostMetadata> {
   const fullPath = path.join(postsDirectory, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const fileStats = fs.statSync(fullPath);
   const matterResult = matter(fileContents);
   
-  const processedContent = await remark().use(html).process(matterResult.content);
-  const contentHtml = processedContent.toString();
+  const contentHtml = await processMarkdown(matterResult.content);
   
   return {
     id,
