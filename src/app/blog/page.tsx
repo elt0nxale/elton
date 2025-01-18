@@ -32,10 +32,10 @@ export default function Blog() {
             <ul>
                 {posts.map(({ id, title, date, readTime }) => (
                     <li key={id} className="mb-6">
-                    <Link href={`/blog/${id}`}>
+                    <Link href={`/blog/${id}`} className="text-gray-900 dark:text-gray-100">
                     {title}
                     </Link>
-                    <p className="text-gray-500">{date} • {readTime}</p>
+                    <p className="text-gray-900 dark:text-gray-400">{date} • {readTime}</p>
                 </li>
                 ))}
             </ul>
