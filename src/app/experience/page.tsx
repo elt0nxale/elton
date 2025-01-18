@@ -1,5 +1,5 @@
-import { FaBriefcase } from "react-icons/fa";
 import ExperienceCard from "@/components/ExperienceCard";
+import Layout from "@/components/Layout";
 
 const experiences = [
     {
@@ -45,12 +45,14 @@ const experiences = [
 
   export default function Experience() {
     return (
-      <div className="experience-page py-12">
-        <div className="grid gap-10 lg:grid-cols-1">
-          {experiences.map((exp, index) => (
-            <ExperienceCard key={index} experience={exp} />
-          ))}
+      <Layout>
+        <div className="experience-page">
+          <div className="grid gap-10 lg:grid-cols-1">
+            {experiences.map((exp, index) => (
+              <ExperienceCard key={index} experience={exp} />
+            ))}
+          </div>
         </div>
-      </div>
+      </Layout>
     );
 }

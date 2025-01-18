@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 const navigation = [
   { name: 'Blog', href: '/blog' },
-  { name: 'About', href: '/' },
+  { name: 'About', href: '/about' },
   { name: 'Experience', href: '/experience' },
 ];
 
@@ -22,7 +22,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const currentPage = navigation.find((item) => item.href === pathname)?.name || '';
+  const formatPageName = (path: string) => {
+    return path
+      .substring(path.lastIndexOf('/') + 1)
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
+  const currentPage = pathname ? formatPageName(pathname) : '';
   const [theme, setTheme] = useState('light');
 
   useEffect(() => {
