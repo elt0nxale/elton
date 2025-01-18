@@ -14,7 +14,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ isOn, handleToggle }) => {
       onClick={handleToggle}
     >
       <span
-        className={`absolute left-0 inline-block w-6 h-6 transform bg-white rounded-full shadow inset-y-0 left-0 transition-transform duration-200 ease-in ${
+        className={`absolute inline-block w-6 h-6 transform bg-white rounded-full shadow inset-y-0 transition-transform duration-200 ease-in ${
           isOn ? 'translate-x-full' : ''
         }`}
       />
