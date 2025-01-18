@@ -43,9 +43,9 @@ export default function Post() {
 
   return (
     <Layout>
-      <div className="post-page py-10">
+      <div className="post-page py-8">
         <h1 className="text-4xl font-bold mb-4">{postData.title}</h1>
-        <p className="text-gray-500 mb-4">{postData.date} • {postData.readTime}</p>
+        <p className="text-gray-500 mb-12">{postData.date} • {postData.readTime}</p>
         <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
       </div>
     </Layout>
