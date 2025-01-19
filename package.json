@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.4.1",
+    "@vercel/speed-insights": "^1.1.0",
+    "canvas-confetti": "^1.9.3",
     "date-fns": "^4.1.0",
     "gray-matter": "^4.0.3",
     "katex": "^0.16.21",
@@ -33,6 +36,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/typography": "^0.5.16",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^22.10.7",
     "@types/react": "^19",
     "@types/react-dom": "^19",
