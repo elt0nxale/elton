@@ -9,7 +9,7 @@ export async function GET(
     const resolvedParams = await Promise.resolve(params);
     
     if (!resolvedParams?.id) {
-      return Response.json({ error: 'Missing post ID' }, { status: 400 });
+      return Response.json({ error: 'Resource is missing post ID' }, { status: 400 });
     }
 
     const post = await getPostMetadata(resolvedParams.id, true);

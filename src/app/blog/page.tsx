@@ -27,18 +27,22 @@ export default function Blog() {
         <Layout>
           <div className="blog-page">
             <p className="mt-6 mb-12 text-lg leading-8 text-gray-400 text-start italic">
-                Attempting to improve my writing skills and hopefully reflecting on the things i wanted to remember as i come across them in my journey.
+                Attempting to improve my writing skills and hopefully reflecting on the things I wanted to remember as I come across them in my journey.
             </p>
-            <ul>
-                {posts.map(({ id, title, date, readTime }) => (
-                    <li key={id} className="mb-6">
-                    <Link href={`/blog/${id}`} className="text-gray-900 dark:text-gray-100">
-                    {title}
-                    </Link>
-                    <p className="text-gray-900 dark:text-gray-400">{date} • {readTime}</p>
-                </li>
-                ))}
-            </ul>
+            {posts.length === 0 ? (
+                <p className="text-gray-900 dark:text-gray-400">Not a single post has been written yet 😰</p>
+            ) : (
+                <ul>
+                    {posts.map(({ id, title, date, readTime }) => (
+                        <li key={id} className="mb-6">
+                            <Link href={`/blog/${id}`} className="text-gray-900 dark:text-gray-100">
+                                {title}
+                            </Link>
+                            <p className="text-gray-900 dark:text-gray-400">{date} • {readTime}</p>
+                        </li>
+                    ))}
+                </ul>
+            )}
           </div>
         </Layout>
     );
