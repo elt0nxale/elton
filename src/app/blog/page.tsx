@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Layout from '@/components/Layout';
 import { FadeLoader } from 'react-spinners';
 import { PostMetadata } from '@/types';
+import { ExternalLink } from 'lucide-react';
 
 export default function Blog() {
     const [posts, setPosts] = useState<PostMetadata[]>([]);
@@ -43,8 +44,17 @@ export default function Blog() {
                     <ul>
                         {posts.map(({ id, title, date, readTime}) => (
                             <li key={id} className="mb-6">
-                                <Link href={`/blog/${id}`} className="text-gray-900 dark:text-gray-100 font-medium">
-                                    {title}
+                                <Link 
+                                    href={`/blog/${id}`} 
+                                    className="flex items-center gap-2 group hover:text-gray-600 dark:hover:text-gray-300 hover:underline"
+                                >
+                                    <span className="text-gray-900 dark:text-gray-100 font-medium">
+                                        {title}
+                                    </span>
+                                    <ExternalLink 
+                                        className="h-4 w-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" 
+                                        aria-hidden="true"
+                                    />
                                 </Link>
                                 <p className="text-gray-900 dark:text-gray-400">{date} • {readTime}</p>
                             </li>
