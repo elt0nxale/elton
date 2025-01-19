@@ -1,4 +1,4 @@
-import { getAllPostMetadata } from '@/lib/markdownUtils';
+import { getAllPostMetadata } from '@/lib/posts';
 import { NextRequest } from 'next/server';
 
 export async function GET(_request: NextRequest) {

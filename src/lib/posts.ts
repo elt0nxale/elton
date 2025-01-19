@@ -1,68 +1,144 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { remark } from 'remark';
-import html from 'remark-html';
-import { format, parseISO } from 'date-fns';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import remarkRehype from 'remark-rehype';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeKatex from 'rehype-katex';
+import rehypeStringify from 'rehype-stringify';
+import { format } from 'date-fns';
+import { PostMetadata, PostData, PostMetadataCache } from '@/types';
+import { WORDS_PER_MINUTE, SECONDS_PER_IMAGE, POST_DATE_FORMAT, postsDirectory, cacheFile } from '@/app/constants/posts';
 
-const postsDirectory = path.join(process.cwd(), 'posts');
+const markdownProcessor = unified()
+  .use(remarkParse)
+  .use(remarkGfm)
+  .use(remarkMath)
+  .use(remarkRehype)
+  .use(rehypeSlug)
+  .use(rehypeAutolinkHeadings)
+  .use(rehypeHighlight)
+  .use(rehypeKatex)
+  .use(rehypeStringify);
 
-const formatDate = (dateString: string) => {
-  const date = parseISO(dateString);
-  return format(date, 'dd MMM yyyy'); 
-};
+const readFile = (filePath: string) => fs.readFileSync(filePath, 'utf8');
+const writeFile = (filePath: string, data: string) => fs.writeFileSync(filePath, data);
+const getFileStats = (filePath: string) => fs.statSync(filePath);
+const fileExists = (filePath: string) => fs.existsSync(filePath);
 
-interface PostData {
-  id: string;
-  title: string;
-  date: string;
-  readTime: string;
-}
+class PostCache {
+  private static async ensure() {
+    const cacheDir = path.dirname(cacheFile);
+    if (!fileExists(cacheDir)) {
+      fs.mkdirSync(cacheDir, { recursive: true });
+    }
+    if (!fileExists(cacheFile)) {
+      writeFile(cacheFile, '{}');
+    }
+  }
 
-export function getSortedPostsData(): PostData[] {
-  const fileNames = fs.readdirSync(postsDirectory);
-  const allPostsData = fileNames.map((fileName) => {
-    const id = fileName.replace(/\.md$/, '');
-    const fullPath = path.join(postsDirectory, fileName);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const matterResult = matter(fileContents);
+  static async get(): Promise<PostMetadataCache> {
+    await this.ensure();
+    return JSON.parse(readFile(cacheFile));
+  }
 
-    return {
-      id,
-      title: matterResult.data.title,
-      date: formatDate(matterResult.data.date),
-      readTime: matterResult.data.readTime,
+  static async update(id: string, metadata: PostMetadata): Promise<void> {
+    const cache = await this.get();
+    const stats = getFileStats(path.join(postsDirectory, `${id}.md`));
+    
+    cache[id] = {
+      ...metadata,
+      lastModified: stats.mtime.getTime(),
     };
-  });
-
-  return allPostsData.sort((a, b) => b.date.localeCompare(a.date));
+    
+    writeFile(cacheFile, JSON.stringify(cache, null, 2));
+  }
 }
 
-export function getAllPostIds() {
-  const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames.map((fileName) => {
-    return {
-      params: {
-        id: fileName.replace(/\.md$/, ''),
-      },
-    };
-  });
+function calculateReadTime(content: string): string {
+  const stripHtml = content.replace(/<[^>]*>/g, '');
+  const words = stripHtml.trim().split(/\s+/).length;
+  const imageMatches = content.match(/<img[^>]*>/g);
+  const imageCount = imageMatches ? imageMatches.length : 0;
+  
+  const readingTimeMinutes = words / WORDS_PER_MINUTE;
+  const imageTimeMinutes = (imageCount * SECONDS_PER_IMAGE) / 60;
+  const totalMinutes = Math.ceil(readingTimeMinutes + imageTimeMinutes);
+  
+  return totalMinutes < 1 ? "< 1 min read" : 
+         totalMinutes === 1 ? "1 min read" : 
+         `${totalMinutes} min read`;
 }
 
-export async function getPostData(id: string) {
-  const fullPath = path.join(postsDirectory, `${id}.md`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
+async function processMarkdown(content: string): Promise<string> {
+  const result = await markdownProcessor.process(content);
+  return result.toString();
+}
 
-  const matterResult = matter(fileContents);
-
-  const processedContent = await remark().use(html).process(matterResult.content);
-  const contentHtml = processedContent.toString();
-
+async function createPostMetadata(id: string, matterResult: matter.GrayMatterFile<string>, fileStats: fs.Stats): Promise<PostMetadata> {
   return {
     id,
-    contentHtml,
     title: matterResult.data.title,
-    date: formatDate(matterResult.data.date),
-    readTime: matterResult.data.readTime,
+    date: format(new Date(matterResult.data.date), POST_DATE_FORMAT),
+    lastModified: fileStats.mtime.getTime(),
+    readTime: calculateReadTime(matterResult.content)
   };
+}
+
+export async function getAllPostMetadata(): Promise<PostMetadata[]> {
+  try {
+    const fileNames = fs.readdirSync(postsDirectory);
+    const posts = await Promise.all(
+      fileNames.map(fileName => {
+        const id = fileName.replace(/\.md$/, '');
+        return getPostMetadata(id);
+      })
+    );
+
+    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  } catch (error) {
+    console.error('Error getting all post metadata:', error);
+    throw error;
+  }
+}
+
+export async function getPostData(id: string): Promise<PostData> {
+  try {
+    const fullPath = path.join(postsDirectory, `${id}.md`);
+    const fileContents = readFile(fullPath);
+    const matterResult = matter(fileContents);
+    const fileStats = getFileStats(fullPath);
+    
+    const [metadata, contentHtml] = await Promise.all([
+      createPostMetadata(id, matterResult, fileStats),
+      processMarkdown(matterResult.content)
+    ]);
+
+    return { metadata, contentHtml };
+  } catch (error) {
+    console.error(`Error getting post data for ${id}:`, error);
+    throw error;
+  }
+}
+
+export async function getPostMetadata(id: string): Promise<PostMetadata> {
+  try {
+    const fullPath = path.join(postsDirectory, `${id}.md`);
+    const fileContents = readFile(fullPath);
+    const matterResult = matter(fileContents);
+    const fileStats = getFileStats(fullPath);
+    
+    const metadata = await createPostMetadata(id, matterResult, fileStats);
+    await PostCache.update(id, metadata);
+    
+    return metadata;
+  } catch (error) {
+    console.error(`Error getting post metadata for ${id}:`, error);
+    throw error;
+  }
 }

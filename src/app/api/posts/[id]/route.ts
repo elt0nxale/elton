@@ -1,4 +1,4 @@
-import { getPostData } from '@/lib/markdownUtils';
+import { getPostData } from '@/lib/posts';
 import { NextRequest } from 'next/server';
 
 export async function GET(
