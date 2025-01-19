@@ -41,7 +41,7 @@ export default function Blog() {
                     <p className="text-gray-900 dark:text-gray-400">Not a single post has been written yet 😰</p>
                 ) : (
                     <ul>
-                        {posts.map(({ id, title, date, lastModified, readTime}) => (
+                        {posts.map(({ id, title, date, readTime}) => (
                             <li key={id} className="mb-6">
                                 <Link href={`/blog/${id}`} className="text-gray-900 dark:text-gray-100 font-medium">
                                     {title}
