@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
-
+import { FadeLoader } from 'react-spinners';
 interface PostData {
     id: string;
     title: string;
@@ -29,11 +29,18 @@ export default function Blog() {
     return (
         <Layout>
           <div className="blog-page">
-            <p className="mt-6 mb-12 text-lg leading-8 text-gray-400 text-start italic">
+            <p className="mt-6 mb-12 text-lg leading-8 dark:text-gray-400 text-gray-500 text-start italic">
                 Attempting to improve my writing skills and hopefully reflecting on the things I wanted to remember as I come across them in my journey.
             </p>
             {loading ? (
-                <div className="loading-spinner">Loading...</div>
+                <div className="flex justify-center items-center p-4 mt-20">
+                    <FadeLoader 
+                        color={'#4B5563'}
+                        height={12}
+                        radius={1}
+                        speedMultiplier={1.25}
+                    />
+                </div>
             ) : (
                 posts.length === 0 ? (
                     <p className="text-gray-900 dark:text-gray-400">Not a single post has been written yet 😰</p>
