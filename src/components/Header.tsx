@@ -16,7 +16,7 @@ export default function Header() {
     const pathname = usePathname();
   
     const formatPageName = (path: string) => {
-      return path
+      return path === "/" ? "About" : path
         .substring(path.lastIndexOf('/') + 1)
         .split('_')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))

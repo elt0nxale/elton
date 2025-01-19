@@ -39,4 +39,4 @@ export const experiences = [
               "Built a redis cache utility decorator to optimize long-running functions and expensive file reads, benchmarked with a 75% latency drop on feather file reads across the deployed cluster",
         ],
       },
-  ];
+];
