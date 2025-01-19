@@ -27,11 +27,11 @@ export default function Homepage() {
                     </div>
                 </div>
                 <p className={paragraphClasses}>
-                    Hey 👋 I've <em className="relative group"><u>recently</u>
+                    Hey 👋 I&apos;ve <em className="relative group"><u>recently</u>
                     <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-max px-4 py-2 text-sm text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             {seconds} seconds ago 
                         </span>
-                    </em>  completed my bachelor's in Information Systems in 3.5 years and about to start my full-time role at a tech firm (yay).
+                    </em>  completed my bachelor&apos;s in Information Systems in 3.5 years and about to start my full-time role at a tech firm (yay).
                 </p>
                 <p className={paragraphClasses}>
                     Graduating early was always a priority for me because
@@ -41,10 +41,10 @@ export default function Homepage() {
                     <li>Internships in my opinion provided a more practical learning experience rather than over-emphasizing on superficial measures.</li>
                 </ol>
                 <p className={paragraphClasses}>
-                    p.s my github grassfields haven't been watered enough the past year or so — I'd like to apologize to myself for that... and also conveniently slide in the excuse of having a life outside of the keyboard <em>(those who have both, don't come @ me)</em>.
+                    p.s my github grassfields haven&apos;t been watered enough the past year or so — I&apos;d like to apologize to myself for that... and also conveniently slide in the excuse of having a life outside of the keyboard <em>(those who have both, don&apos;t come @ me)</em>.
                 </p>
                 <p className={paragraphClasses}>
-                    Now that there's more time without school commitments, I'd like to better spend it on things like updating my <Link href="/blog" className="underline font-bold">blog</Link>, poking around cool stuff, and officially embark on autodidacticism.
+                    Now that there&apos;s more time without school commitments, I&apos;d like to better spend it on things like updating my <Link href="/blog" className="underline font-bold">blog</Link>, poking around cool stuff, and officially embark on autodidacticism.
                 </p>
             </div>
         </Layout>
