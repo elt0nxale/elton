@@ -30,7 +30,7 @@ export default function Blog() {
         <Layout>
           <div className="blog-page px-5">
             <p className="mt-6 mb-12 text-lg leading-8 dark:text-gray-400 text-gray-500 text-start italic">
-                Attempting to improve my writing skills and hopefully reflecting on the things I wanted to remember as I come across them in my journey.
+                Attempting to improve my writing and (hopefully) reflect on the things I wanted to remember as I come across them in this journey.
             </p>
             {loading ? (
                 <div className="flex justify-center items-center p-4 mt-20">
