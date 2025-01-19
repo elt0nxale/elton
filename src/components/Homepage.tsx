@@ -28,8 +28,8 @@ export default function Homepage() {
                 </div>
                 <p className={paragraphClasses}>
                     Hey 👋 I&apos;ve <em className="relative group"><u>recently</u>
-                    <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-max px-4 py-2 text-sm text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            {seconds} seconds ago 
+                    <span className="absolute bottom-full transform -translate-x-1/2 w-max px-3 py-2 text-sm text-white bg-black rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            {seconds} secs ago 
                         </span>
                     </em>  completed my bachelor&apos;s in Information Systems in 3.5 years and about to start my full-time role at a tech firm (yay).
                 </p>
