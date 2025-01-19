@@ -33,18 +33,31 @@ const fileExists = (filePath: string) => fs.existsSync(filePath);
 
 class PostCache {
   private static async ensure() {
-    const cacheDir = path.dirname(cacheFile);
-    if (!fileExists(cacheDir)) {
-      fs.mkdirSync(cacheDir, { recursive: true });
-    }
-    if (!fileExists(cacheFile)) {
-      writeFile(cacheFile, '{}');
+    try {
+      const cacheDir = path.dirname(cacheFile);
+      if (!fileExists(cacheDir)) {
+        fs.mkdirSync(cacheDir, { recursive: true });
+      }
+      if (!fileExists(cacheFile)) {
+        fs.writeFileSync(cacheFile, '{}');
+      }
+      return true;
+    } catch (error) {
+        console.warn('Cache creation failed, using in-memory cache:', error);
+      return false;
     }
   }
 
   static async get(): Promise<PostMetadataCache> {
-    await this.ensure();
-    return JSON.parse(readFile(cacheFile));
+    const cacheExists = await this.ensure();
+    if (!cacheExists) {
+      return {};
+    }
+    try {
+      return JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+    } catch {
+      return {};
+    }
   }
 
   static async update(id: string, metadata: PostMetadata): Promise<void> {
