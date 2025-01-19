@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Layout from "@/components/Layout";
-import Image from 'next/image';
 
 const paragraphClasses = "mt-6 text-lg leading-8 text-gray-900 dark:text-gray-300 text-start";
 
