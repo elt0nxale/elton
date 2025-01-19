@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import ClockWidget from '@/components/ClockWidget';
+import { ThemeProvider, useTheme } from '@/contexts/ThemeContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
   const formatPageName = (path: string) => {
     return path
       .substring(path.lastIndexOf('/') + 1)
@@ -31,47 +33,36 @@ export default function RootLayout({
   };
 
   const currentPage = pathname ? formatPageName(pathname) : '';
-  const [theme, setTheme] = useState('light');
-
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
 
   return (
     <html lang="en">
-      <body className={`bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 ${inter.className}`}>
-        <div className="min-h-screen flex flex-col">
-          <header className="w-full fixed bg-gray-100 dark:bg-gray-900 z-10">
-            <div className="container mx-auto px-6 lg:px-8 max-w-3xl py-8 mt-2">
-              <div className="flex flex-wrap items-center justify-between">
-                <h1 className="text-2xl font-bold text-left">{currentPage}</h1>
-                <div className="flex items-center space-x-4">
-                  <ClockWidget />
-                  <ToggleSwitch isOn={theme === "dark"} handleToggle={toggleTheme} />
-                </div>              
+      <ThemeProvider>
+        <body className={`bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 ${inter.className}`}>
+          <div className="min-h-screen flex flex-col">
+            <header className="w-full fixed bg-gray-100 dark:bg-gray-900 z-10">
+              <div className="container mx-auto px-6 lg:px-8 max-w-3xl py-8 mt-2">
+                <div className="flex flex-wrap items-center justify-between">
+                  <h1 className="text-2xl font-bold text-left">{currentPage}</h1>
+                  <div className="flex items-center space-x-4">
+                    <ClockWidget />
+                    <ToggleSwitch isOn={theme === "dark"} handleToggle={toggleTheme} />
+                  </div>              
+                </div>
+                <nav className="flex justify-end space-x-4 py-4 me-4">
+                  {navigation.map((item) => (
+                    <Link key={item.name} href={item.href} className="text-md font-semibold leading-6 hover:text-gray-600">
+                      {item.name}
+                    </Link>
+                  ))}
+                </nav>
               </div>
-              <nav className="flex justify-end space-x-4 py-4 me-4">
-                {navigation.map((item) => (
-                  <Link key={item.name} href={item.href} className="text-md font-semibold leading-6 hover:text-gray-600">
-                    {item.name}
-                  </Link>
-                ))}
-              </nav>
-            </div>
-          </header>
-          <main className="flex-grow pt-24 container mx-auto px-6 lg:px-8 max-w-3xl">
-            {children}
-          </main>
-        </div>
-      </body>
+            </header>
+            <main className="flex-grow pt-24 container mx-auto px-6 lg:px-8 max-w-3xl">
+              {children}
+            </main>
+          </div>
+        </body>
+      </ThemeProvider>
     </html>
   );
 }
