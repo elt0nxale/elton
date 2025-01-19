@@ -19,9 +19,9 @@ export default function Homepage() {
 
     return (
         <Layout>
-            <div className="about-page mx-auto max-w-2xl text-center">
+            <div className="about-page px-5 text-center">
                 <div className="flex flex-col items-start">
-                    <div className="mt-8 flex flex-col gap-3 items-start">
+                    <div className="mt-6 flex flex-col gap-3 items-start">
                         <h1 className="text-3xl font-bold">Elton</h1>
                         <h4 className="text-lg">⚙️ Software Engineer / Site Reliability Engineer</h4>
                     </div>

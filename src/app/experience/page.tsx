@@ -47,7 +47,7 @@ const experiences = [
     return (
       <Layout>
         <div className="experience-page">
-          <div className="grid gap-10 lg:grid-cols-1">
+          <div className="grid gap-4 lg:grid-cols-1">
             {experiences.map((exp, index) => (
               <ExperienceCard key={index} experience={exp} />
             ))}
