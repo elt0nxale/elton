@@ -24,7 +24,6 @@ export default function Post() {
         const response = await fetch(`/api/posts/${id}`);
         if (!response.ok) throw new Error('Failed to fetch post');
         const data = await response.json();
-        console.log('data is ', data);
         setPostData(data);
       } catch (err) {
         const error = err as Error;
@@ -51,7 +50,7 @@ export default function Post() {
 
   return (
     <Layout>
-      <div className="post-page py-8">
+      <div className="post-page py-8 px-5">
         <h1 className="text-4xl font-bold mb-4">{postData.metadata?.title}</h1>
         <p className="text-gray-500 mb-12">{postData.metadata?.date} • {postData.metadata?.readTime}</p>
         <div 

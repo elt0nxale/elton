@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs, { fstat } from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { unified } from 'unified';
@@ -84,7 +84,7 @@ async function createPostMetadata(id: string, matterResult: matter.GrayMatterFil
   return {
     id,
     title: matterResult.data.title,
-    date: format(new Date(matterResult.data.date), POST_DATE_FORMAT),
+    date: format(fileStats.ctime, POST_DATE_FORMAT),
     lastModified: fileStats.mtime.getTime(),
     readTime: calculateReadTime(matterResult.content)
   };

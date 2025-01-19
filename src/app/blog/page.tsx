@@ -4,21 +4,21 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
 import { FadeLoader } from 'react-spinners';
-import { PostData } from '@/types';
+import { PostMetadata } from '@/types';
 
 export default function Blog() {
-    const [posts, setPosts] = useState<PostData[]>([]);
+    const [posts, setPosts] = useState<PostMetadata[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        async function fetchPosts() {
+        async function fetchPostsMetadata() {
             setLoading(true);
             const response = await fetch('/api/posts');
             const data = await response.json();
             setPosts(data);
             setLoading(false);
         }
-        fetchPosts();
+        fetchPostsMetadata();
     }, []);
 
     return (
@@ -41,12 +41,12 @@ export default function Blog() {
                     <p className="text-gray-900 dark:text-gray-400">Not a single post has been written yet 😰</p>
                 ) : (
                     <ul>
-                        {posts.map(({ metadata }) => (
-                            <li key={metadata.id} className="mb-6">
-                                <Link href={`/blog/${metadata.id}`} className="text-gray-900 dark:text-gray-100 font-medium">
-                                    {metadata.title}
+                        {posts.map(({ id, title, date, lastModified, readTime}) => (
+                            <li key={id} className="mb-6">
+                                <Link href={`/blog/${id}`} className="text-gray-900 dark:text-gray-100 font-medium">
+                                    {title}
                                 </Link>
-                                <p className="text-gray-900 dark:text-gray-400">{metadata.date} • {metadata.readTime}</p>
+                                <p className="text-gray-900 dark:text-gray-400">{date} • {readTime}</p>
                             </li>
                         ))}
                     </ul>
