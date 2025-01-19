@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
     lhci:
@@ -21,9 +18,7 @@ jobs:
           - name: npm install, build
             run: |
               npm install
-              npm run build
-          - name: List build directory contents
-            run: ls -R .next  
+              npm run build 
           - name: run Lighthouse CI
             run: |
               npm install -g @lhci/cli@0.14.x
