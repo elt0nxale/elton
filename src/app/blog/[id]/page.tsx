@@ -46,7 +46,7 @@ export default function Post() {
     };
 
     fetchPost();
-  }, [id]);
+  }, [id, POST_CACHE_KEY]);
 
   if (isLoading) return (
     <div className="flex justify-center items-center p-4 mt-20">
