@@ -1,0 +1,49 @@
+name: Lighthouse Accessibility and UI/UX Scanning
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lighthouse:
+    name: Lighthouse Accessibility and UI/UX Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Install Lighthouse CLI
+      - name: Install Lighthouse
+        run: npm install -g lighthouse
+
+      # Step 5: Run Lighthouse scan
+      - name: Run Lighthouse Accessibility and UX Scanning
+        run: |
+          lighthouse https://eltonxale.vercel.app \
+            --only-categories=accessibility,performance \
+            --output=json \
+            --output=html \
+            --output-path=./lighthouse-report
+
+      # Step 6: Upload Lighthouse reports as artifacts
+      - name: Upload Lighthouse reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: lighthouse-report
+          path: ./lighthouse-report.*
