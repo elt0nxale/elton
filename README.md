@@ -19,6 +19,7 @@ Wanted a site for myself on the internet mainly to:
 - Markdown Processing (remark, rehype)
 
 ## Project Structure
+```
 src
 ├── app/# Next.js pages 
 ├── components/ # Reusable components 
@@ -26,6 +27,7 @@ src
 ├── lib/ # Utilities 
 ├── posts/ # Markdown blog posts 
 └── types/ # TypeScript definitions
+```
 
 ## Getting Started
 
