@@ -1,4 +1,4 @@
-# Personal Portfolio & Blog
+# Why This Was Built
 
 Wanted a site for myself on the internet mainly to:
 1) Rekindle interest in frontend (nextjs has a great developer user exp imo)
