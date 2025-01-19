@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Layout from '@/components/Layout';
 import { FadeLoader } from 'react-spinners';
 import { PostData } from '@/types';
+import SessionCache from '@/lib/SessionCache';
 
 
 export default function Post() {
@@ -14,6 +15,8 @@ export default function Post() {
   const [postData, setPostData] = useState<PostData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const POST_CACHE_KEY = 'blog-post-' + id;
+
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -21,9 +24,18 @@ export default function Post() {
       setError(null);
       
       try {
+        const cached = SessionCache.get<PostData>(POST_CACHE_KEY);
+        if (cached) {
+          setPostData(cached);
+          setIsLoading(false);
+          return;
+        }
+
         const response = await fetch(`/api/posts/${id}`);
         if (!response.ok) throw new Error('Failed to fetch post');
         const data = await response.json();
+
+        SessionCache.set(POST_CACHE_KEY, data);
         setPostData(data);
       } catch (err) {
         const error = err as Error;

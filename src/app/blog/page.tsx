@@ -6,18 +6,35 @@ import Layout from '@/components/Layout';
 import { FadeLoader } from 'react-spinners';
 import { PostMetadata } from '@/types';
 import { ExternalLink } from 'lucide-react';
+import SessionCache from '@/lib/SessionCache';
+
 
 export default function Blog() {
     const [posts, setPosts] = useState<PostMetadata[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const POSTS_CACHE_KEY = 'blog-posts-metadata';
 
     useEffect(() => {
         async function fetchPostsMetadata() {
             setLoading(true);
-            const response = await fetch('/api/posts');
-            const data = await response.json();
-            setPosts(data);
-            setLoading(false);
+            try {
+                const cached = SessionCache.get<PostMetadata[]>(POSTS_CACHE_KEY);
+                if (cached) {
+                    setPosts(cached);
+                    setLoading(false);
+                    return;
+                }
+
+                const response = await fetch('/api/posts');
+                const data = await response.json();
+
+                setPosts(data);
+                SessionCache.set(POSTS_CACHE_KEY, data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            } finally {
+                setLoading(false);
+            }
         }
         fetchPostsMetadata();
     }, []);

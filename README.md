@@ -7,10 +7,12 @@ Wanted a site for myself on the internet mainly to:
 4) Be more in touch with tech
 
 ## Features
-- Dark/Light mode toggle
 - Markdown-based blog posts
+- Server-side caching to reduce file system reads and markdown processing
 - Server-side rendering
-- Responsive layout
+- Client-side caching of blog posts using sessionStorage
+- Responsive layouts
+- Accessibiity optimised
 
 ## Tech Stack
 - Next.js 14
