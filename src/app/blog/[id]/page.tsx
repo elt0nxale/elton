@@ -16,18 +16,22 @@ export default function Post() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchPost = () => {
+    const fetchPost = async () => {
       setIsLoading(true);
       setError(null);
       
-      fetch(`/api/posts/${id}`)
-        .then(response => {
-          if (!response.ok) throw new Error('Failed to fetch post');
-          return response.json();
-        })
-        .then(data => setPostData(data))
-        .catch(err => setError(err.message))
-        .finally(() => setIsLoading(false));
+      try {
+        const response = await fetch(`/api/posts/${id}`);
+        if (!response.ok) throw new Error('Failed to fetch post');
+        const data = await response.json();
+        console.log('data is ', data);
+        setPostData(data);
+      } catch (err) {
+        const error = err as Error;
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchPost();
@@ -48,8 +52,8 @@ export default function Post() {
   return (
     <Layout>
       <div className="post-page py-8">
-        <h1 className="text-4xl font-bold mb-4">{postData.metadata.title}</h1>
-        <p className="text-gray-500 mb-12">{postData.metadata.date} • {postData.metadata.readTime}</p>
+        <h1 className="text-4xl font-bold mb-4">{postData.metadata?.title}</h1>
+        <p className="text-gray-500 mb-12">{postData.metadata?.date} • {postData.metadata?.readTime}</p>
         <div 
           className="
             prose prose-lg dark:prose-invert max-w-none

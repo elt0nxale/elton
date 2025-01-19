@@ -4,12 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Layout from '@/components/Layout';
 import { FadeLoader } from 'react-spinners';
-interface PostData {
-    id: string;
-    title: string;
-    date: string;
-    readTime: string;
-}
+import { PostData } from '@/types';
 
 export default function Blog() {
     const [posts, setPosts] = useState<PostData[]>([]);
@@ -46,12 +41,12 @@ export default function Blog() {
                     <p className="text-gray-900 dark:text-gray-400">Not a single post has been written yet 😰</p>
                 ) : (
                     <ul>
-                        {posts.map(({ id, title, date, readTime }) => (
-                            <li key={id} className="mb-6">
-                                <Link href={`/blog/${id}`} className="text-gray-900 dark:text-gray-100 font-medium">
-                                    {title}
+                        {posts.map(({ metadata }) => (
+                            <li key={metadata.id} className="mb-6">
+                                <Link href={`/blog/${metadata.id}`} className="text-gray-900 dark:text-gray-100 font-medium">
+                                    {metadata.title}
                                 </Link>
-                                <p className="text-gray-900 dark:text-gray-400">{date} • {readTime}</p>
+                                <p className="text-gray-900 dark:text-gray-400">{metadata.date} • {metadata.readTime}</p>
                             </li>
                         ))}
                     </ul>

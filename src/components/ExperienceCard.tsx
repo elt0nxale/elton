@@ -10,7 +10,7 @@ type CardProps = {
 };
 
 const ExperienceCard: React.FC<CardProps> = ({ experience }) => {
-    const { title, company, tools, description } = experience;
+    const { company, tools, description } = experience;
 
     return (
         <div className="p-5 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">

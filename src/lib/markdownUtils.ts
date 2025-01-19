@@ -76,44 +76,57 @@ async function processMarkdown(content: string): Promise<string> {
   return processedContent.toString();
 }
 
-export async function getPostMetadata(id: string, includeContent = false): Promise<PostMetadata> {
-  const fullPath = path.join(postsDirectory, `${id}.md`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  const fileStats = fs.statSync(fullPath);
-  const matterResult = matter(fileContents);
-  
-  const contentHtml = await processMarkdown(matterResult.content);
-  
-  return {
-    id,
-    title: matterResult.data.title,
-    date: format(fileStats.ctime, 'dd MMM yyyy'),
-    lastModified: fileStats.mtime.getTime(),
-    readTime: calculateReadTime(contentHtml),
-  };
-}
-
-export async function getAllPosts(): Promise<PostMetadata[]> {
-  const cache = await getCachedMetadata();
+export async function getAllPostMetadata(): Promise<PostMetadata[]> {
   const fileNames = fs.readdirSync(postsDirectory);
   
   const posts = await Promise.all(
     fileNames.map(async fileName => {
       const id = fileName.replace(/\.md$/, '');
-      const fullPath = path.join(postsDirectory, fileName);
-      const stats = fs.statSync(fullPath);
-      
-      // Use cache if file hasn't changed
-      if (cache[id] && cache[id].lastModified === stats.mtime.getTime()) {
-        return cache[id];
-      }
-      
-      // Process and cache if file is new or modified
-      const metadata = await getPostMetadata(id);
-      await updateCache(id, metadata);
-      return metadata;
+      return getPostMetadata(id);
     })
   );
+
+  return posts.sort((a, b) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+}
+
+export async function getPostData(id: string): Promise<PostData> {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const matterResult = matter(fileContents);
+  const fileStats = fs.statSync(fullPath);
+  const contentHtml = await processMarkdown(matterResult.content);
   
-  return posts;
+  const metadata: PostMetadata = {
+    id,
+    title: matterResult.data.title,
+    date: format(new Date(matterResult.data.date), 'MMMM dd, yyyy'),
+    lastModified: fileStats.mtime.getTime(),
+    readTime: calculateReadTime(matterResult.content)
+  };
+  
+  return {
+    metadata,
+    contentHtml
+  };
+}
+
+export async function getPostMetadata(id: string): Promise<PostMetadata> {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const fileStats = fs.statSync(fullPath);
+  const matterResult = matter(fileContents);
+  
+  const metadata: PostMetadata = {
+    id,
+    title: matterResult.data.title,
+    date: format(new Date(matterResult.data.date), 'MMMM dd, yyyy'),
+    lastModified: fileStats.mtime.getTime(),
+    readTime: calculateReadTime(matterResult.content)
+  };
+  
+  await updateCache(id, metadata);
+  
+  return metadata;
 }

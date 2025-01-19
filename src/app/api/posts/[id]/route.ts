@@ -1,18 +1,14 @@
-import { getPostMetadata } from '@/lib/markdownUtils';
+import { getPostData } from '@/lib/markdownUtils';
 import { NextRequest } from 'next/server';
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await Promise.resolve(params);
-    
-    if (!resolvedParams?.id) {
-      return Response.json({ error: 'Resource is missing post ID' }, { status: 400 });
-    }
+    const { id } = await params;
 
-    const post = await getPostMetadata(resolvedParams.id, true);
+    const post = await getPostData(id);
     return Response.json(post);
   } catch (error) {
     console.error('Error fetching post:', error);
