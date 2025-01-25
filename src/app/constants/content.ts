@@ -2,10 +2,10 @@ export const experiences = [
     {
         title: 'Winter Analyst',
         company: 'Millennium Management LLC',
-        tools: ['Angular', 'Spring Boot','Java','PostgreSQL','EKS','S3','Docker'],
+        tools: ['Angular', 'Spring Boot','Java','PostgreSQL','EKS','S3'],
         description: [
-              "Developed an event-driven file auditing solution for the core data team to optimize resource usage on report generation, integrating both legacy and modern data sources",
-              "Optimised the ETL process to handle overlapping windows and backfilling via hashing and idempotent processing",
+              "Built event-driven data processing solutions for the core data team to monitor resource usage, interfacing legacy and modern systems",
+              "Achieved 'effectively-once' end-to-end processing using a combination atomic transactions, hashing and tracking processing state externally"
         ],
     },
     {
@@ -13,9 +13,8 @@ export const experiences = [
         company: 'GIC - Public Markets Data',
         tools: ['Angular', 'Spring Boot','Java','PostgreSQL','Openshift'],
         description: [
-                "Automated data quality checks via pdf/excel report generation for risk & performance monitoring",
-                "Wrote some scala to allow data stewards to upkeep hierarchical validity across the public markets portfolio universe",
-                "Cut effort for manual developer intervention by integrating retry with exponential backoffs for scheduled jobs with external dependencies",
+                "Built self-service data management and data quality reporting solutions for the reference data team with the goal of automating manual processes",
+                "Wrote some scala enabling data stewards to keep track of the validity of the portfolio universe",
         ],
     },
     {
@@ -23,20 +22,18 @@ export const experiences = [
         company: 'Morgan Stanley',
         tools: ['Spring Boot', 'Java','Kafka','Microsoft Teams','Multi-threading'],
         description: [
-            "Built a resilient and high throughput notification service using Spring Boot, Spring Kafka and Teams API",
-            "Initiated performance testing and thread-to-partition tuning based on quantitative metrics gathered from data analysis",
-            "Iterated on user feedback to incorporate features like integrated email shortcuts and batch processing to tackle spam",
+            "Designed and implemented a high-throughput notification service to alert ops and traders of critical system events",
+            "Initiated performance testing and cluster configuration based on metrics gathered from data analysis and extended it with features to improve user experience",
         ],
       },
       {
         title: 'Software Engineer Intern',
         company: 'GIC - Fixed Income & Multi-Assets',
-        tools: ['Angular', 'Spring Boot','Java','PostgreSQL','Openshift'],
+        tools: ['Angular', 'Spring Boot','Java','PostgreSQL','Openshift','Docker'],
         description: [
-              "Collaborated with quants to refine and build statistical dashboards serving insights for portfolio managers",
-              "Built features and workflows to help portfolio managers track rebalancing tasks on the internal platform",
-              "Wrote a small orchestration script with docker compose to help developers set up their container workloads locally",
-              "Built a redis cache utility decorator to optimize long-running functions and expensive file reads, benchmarked with a 75% latency drop on feather file reads across the deployed cluster",
+              "Collaborated with quants to implement analytical dashboards and a workflow automation tool utilised by portfolio managers",
+              "Streamlined the team's local container workload management using docker compose",
+              "Implemented a distributed cache-aside strategy reducing api latency and deserialization overhead from s3",
         ],
       },
 ];

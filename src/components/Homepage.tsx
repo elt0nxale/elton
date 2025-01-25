@@ -24,11 +24,11 @@ export default function Homepage() {
                 <div className="flex flex-col items-start">
                     <div className="flex flex-col gap-3 items-start">
                         <h1 className="text-3xl font-bold">Elton</h1>
-                        <h4 className="text-lg">⚙️ Software Engineer / Site Reliability Engineer</h4>
+                        <h4 className="text-lg">⚙️ Software Engineer</h4>
                     </div>
                 </div>
                 <p className={paragraphClasses}>
-                    Hey 👋 I&apos;ve <ConfettiTimer seconds={seconds}/> completed my bachelor&apos;s in Information Systems in 3.5 years and about to start my full-time role at a tech firm (yay).
+                    Hey 👋 I&apos;ve <ConfettiTimer seconds={seconds}/> completed my bachelor&apos;s in Information Systems in 3.5 years and about to start my full-time role (yay).
                 </p>
                 <p className={paragraphClasses}>
                     Graduating early was always a priority for me because
