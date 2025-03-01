@@ -21,13 +21,13 @@ Chatgpt says that 💭
 
 I've never bothered so much about this feeling, but at the same time i have never come to realise what causes it, and what could come out of this feeling.
 
-Well, atleast the last line of response was re-assuring. I think a large part stems from the uncertainty of what the future is going to be like. *Is this the job i wanted? How's my boss going to be? How will this decision affect my career trajectory Will it be hard to switch back to a role i want? *
+Well, atleast the last line of response was re-assuring. I think a large part stems from the uncertainty of what the future is going to be like. *Is this the job i wanted? How's my boss going to be? How will this decision affect my career trajectory? *
 
 
 ### Building this 
-Writing this at 1.29am 😴 but i'm only partially satisfied with how this site turned out. Given that this is entirely in javascript html and css, a shit ton of time was spent greasing my frontend gears that probably never really ran since my frontend internship. Also a huge portion of time was spent figuring out how this site should turn out, and yes there was no wireframe or plan involved.
+Writing this at 1.29am 😴 but only half satisfied with how it turned out. Given that this is entirely in js/html/css, a ton of time was spent greasing frontend gears that probably never really ran since my frontend internship 2 years ago. Also a huge portion of time was spent figuring out how this site should turn out, and yes there was no wireframe or plan involved.
 
-This is a list of things i was trying to achieve (in order of importance):
+This is a list of things i was trying to achieve (in decreasing order of importance):
 1. Make it easy to update the blog. 
    > *With [nextjs dynamic routes](https://nextjs.org/docs/pages/building-your-application/routing/dynamic-routes) and [remark](https://github.com/remarkjs/remark) markdown parsing, i basically only need to write my content in .md and the ci/cd does its job*
 2. Cut out fancy animation and (try to) minimise the amount of cognitive load. 
@@ -36,9 +36,9 @@ This is a list of things i was trying to achieve (in order of importance):
    > *Adobe acrobat reader doesnt bombard your eyes with text spanning the entire window just because your monitor is that wide. I also wanted to make it feel like you're accessing this from an ipad on focused mode*
 
 
-The solutions seem to be enough so far, until markdown becomes a hassle to write..then we can probably look into converters. 
+This workaround seems to be enough so far, until markdown becomes a hassle to write..then we can probably look into converters. 
 
-Anyway, if you're reading this, thank you for being part of the 🚥 site traffic. Hope you agree with me on points 2 and 3, and if not feel free to give me feedback via socials 📭
+Anyway, if you're reading this, thank you for being part of the 🚥 site traffic. Feel free to give me feedback via socials 📭
    
 
 
