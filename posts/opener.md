@@ -1,5 +1,6 @@
 ---
 title: "I've graduated. What now?"
+date: "2025-01-19"
 ---
 
 Welcome to `/blog`, where i'd intended to put down what i find interesting into words. 

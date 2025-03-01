@@ -7,7 +7,7 @@ export interface PostMetadata {
     id: string;
     title: string;
     date: string;
-    lastModified: number;
+    lastModified: string;
     readTime: string;
 }
 

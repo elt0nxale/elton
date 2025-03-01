@@ -1,5 +1,6 @@
 ---
 title: "Message Delivery Guarantees in Kafka"
+date: "2025-01-20"
 ---
 
 ### Intro
