@@ -64,7 +64,8 @@ export default function Post() {
     <Layout>
       <div className="post-page py-8 px-5">
         <h1 className="text-4xl font-bold mb-4">{postData.metadata?.title}</h1>
-        <p className="text-gray-500 mb-12">{postData.metadata?.date} • {postData.metadata?.readTime}</p>
+        <p className="text-gray-500 mb-1">{postData.metadata?.date} • {postData.metadata?.readTime}</p>
+        <em className="text-gray-500 mb-12 font-light">Last edited {postData.metadata?.lastModified}</em>
         <div 
           className="
             prose prose-lg dark:prose-invert max-w-none

@@ -66,7 +66,7 @@ class PostCache {
     
     cache[id] = {
       ...metadata,
-      lastModified: stats.mtime.getTime(),
+      lastModified: format(stats.mtime.getTime(),POST_DATE_FORMAT),
     };
     
     writeFile(cacheFile, JSON.stringify(cache, null, 2));
@@ -97,8 +97,8 @@ async function createPostMetadata(id: string, matterResult: matter.GrayMatterFil
   return {
     id,
     title: matterResult.data.title,
-    date: format(fileStats.ctime, POST_DATE_FORMAT),
-    lastModified: fileStats.mtime.getTime(),
+    date: format(matterResult.data.date, POST_DATE_FORMAT),
+    lastModified: format(fileStats.mtime.getTime(), POST_DATE_FORMAT),
     readTime: calculateReadTime(matterResult.content)
   };
 }

@@ -1,5 +1,6 @@
 ---
 title: "A thing or two about Site Reliability Engineering (SRE)"
+date: "2025-02-22"
 ---
 
 ### Intro
