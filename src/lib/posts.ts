@@ -99,7 +99,7 @@ async function createPostMetadata(id: string, matterResult: matter.GrayMatterFil
     id,
     title: matterResult.data.title,
     date: format(matterResult.data.date, POST_DATE_FORMAT),
-    lastModified: format(fileStats.mtime.getTime(), POST_DATE_FORMAT, {timeZone: timeZone, locale: enUS}),
+    lastModified: format(fileStats.ctime.getTime(), POST_DATE_FORMAT, {timeZone: timeZone, locale: enUS}),
     readTime: calculateReadTime(matterResult.content)
   };
 }
