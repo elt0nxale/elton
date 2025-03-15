@@ -11,9 +11,10 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeKatex from 'rehype-katex';
 import rehypeStringify from 'rehype-stringify';
-import { format } from 'date-fns';
+import { format } from 'date-fns-tz';
+import { enUS } from 'date-fns/locale';  
 import { PostMetadata, PostData, PostMetadataCache } from '@/types';
-import { WORDS_PER_MINUTE, SECONDS_PER_IMAGE, POST_DATE_FORMAT, postsDirectory, cacheFile } from '@/app/constants/posts';
+import { WORDS_PER_MINUTE, SECONDS_PER_IMAGE, POST_DATE_FORMAT, postsDirectory, cacheFile, timeZone } from '@/app/constants/posts';
 
 const markdownProcessor = unified()
   .use(remarkParse)
@@ -98,7 +99,7 @@ async function createPostMetadata(id: string, matterResult: matter.GrayMatterFil
     id,
     title: matterResult.data.title,
     date: format(matterResult.data.date, POST_DATE_FORMAT),
-    lastModified: format(fileStats.mtime.getTime(), POST_DATE_FORMAT),
+    lastModified: format(fileStats.mtime.getTime(), POST_DATE_FORMAT, {timeZone: timeZone, locale: enUS}),
     readTime: calculateReadTime(matterResult.content)
   };
 }
