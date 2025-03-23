@@ -6,4 +6,8 @@ export const SECONDS_PER_IMAGE = 12;
 export const POST_DATE_FORMAT = 'MMMM dd, yyyy';
 
 export const postsDirectory = path.join(process.cwd(), 'posts');
+
+// CACHE
 export const cacheFile = path.join(os.tmpdir(), 'posts-metadata.json');
+export const REDIS_POST_TTL = 60 * 60 * 24 * 3;
+export const SESSION_POST_TTL = 60 * 60 * 1000;

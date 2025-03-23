@@ -1,10 +1,13 @@
+import { SESSION_POST_TTL } from '@/app/constants/posts';
+
 interface CacheEntry<T> {
   data: T;
   timestamp: number;
 }
 
 export default class SessionCache {
-  private static CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
+  
+  private static CACHE_DURATION = SESSION_POST_TTL;
 
   static set<T>(key: string, data: T): void {
     if (typeof window === 'undefined') return;
