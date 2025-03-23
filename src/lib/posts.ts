@@ -1,20 +1,20 @@
-import { PostMetadata, PostData } from '@/types';
-import { getRedisClient } from './redis';
-import { WORDS_PER_MINUTE, SECONDS_PER_IMAGE, POST_DATE_FORMAT, REDIS_POST_TTL, postsDirectory } from '@/app/constants/posts';
-import fs from 'fs';
-import path from 'path';
+import { POST_DATE_FORMAT, REDIS_POST_TTL, SECONDS_PER_IMAGE, WORDS_PER_MINUTE, postsDirectory } from '@/app/constants/posts';
+import { PostData, PostMetadata } from '@/types';
+import { format } from 'date-fns';
+import { readFile, readdir } from 'fs/promises';
 import matter from 'gray-matter';
-import { unified } from 'unified';
-import remarkParse from 'remark-parse';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import remarkRehype from 'remark-rehype';
-import rehypeSlug from 'rehype-slug';
+import path from 'path';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeKatex from 'rehype-katex';
+import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
-import { format } from 'date-fns';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import { unified } from 'unified';
+import { getRedisClient } from './redis';
 
 
 const markdownProcessor = unified()
@@ -27,8 +27,6 @@ const markdownProcessor = unified()
   .use(rehypeHighlight)
   .use(rehypeKatex)
   .use(rehypeStringify);
-
-const readFile = (filePath: string) => fs.readFileSync(filePath, 'utf8');
 
 function calculateReadTime(content: string): string {
   const stripHtml = content.replace(/<[^>]*>/g, '');
@@ -70,7 +68,7 @@ export async function getPostData(id: string): Promise<PostData> {
     }
 
     const fullPath = path.join(postsDirectory, `${id}.md`);
-    const fileContents = readFile(fullPath);
+    const fileContents = await readFile(fullPath, 'utf-8');
     const matterResult = matter(fileContents);
     
     const [metadata, contentHtml] = await Promise.all([
@@ -100,7 +98,7 @@ export async function getAllPostMetadata(): Promise<PostMetadata[]> {
       return JSON.parse(cachedPostsMetadata);
     }
 
-    const fileNames = fs.readdirSync(postsDirectory);
+    const fileNames = await readdir(postsDirectory, 'utf-8');
     const postsMetadata = await Promise.all(
       fileNames.map(fileName => {
         const id = fileName.replace(/\.md$/, '');
@@ -124,7 +122,7 @@ export async function getAllPostMetadata(): Promise<PostMetadata[]> {
 export async function getPostMetadata(id: string): Promise<PostMetadata> {
   try {
     const fullPath = path.join(postsDirectory, `${id}.md`);
-    const fileContents = readFile(fullPath);
+    const fileContents = await readFile(fullPath, 'utf-8');
     const matterResult = matter(fileContents);
     
     const metadata = await createPostMetadata(id, matterResult);
