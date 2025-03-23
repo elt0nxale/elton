@@ -1,19 +1,21 @@
-import fs from 'fs';
-import path from 'path';
+import { POST_DATE_FORMAT, REDIS_POST_TTL, SECONDS_PER_IMAGE, WORDS_PER_MINUTE, postsDirectory } from '@/app/constants/posts';
+import { PostData, PostMetadata } from '@/types';
+import { format } from 'date-fns';
+import { readFile, readdir } from 'fs/promises';
 import matter from 'gray-matter';
-import { unified } from 'unified';
-import remarkParse from 'remark-parse';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import remarkRehype from 'remark-rehype';
-import rehypeSlug from 'rehype-slug';
+import path from 'path';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeKatex from 'rehype-katex';
+import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
-import { format } from 'date-fns';
-import { PostMetadata, PostData, PostMetadataCache } from '@/types';
-import { WORDS_PER_MINUTE, SECONDS_PER_IMAGE, POST_DATE_FORMAT, postsDirectory, cacheFile } from '@/app/constants/posts';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import { unified } from 'unified';
+import { getRedisClient } from './redis';
+
 
 const markdownProcessor = unified()
   .use(remarkParse)
@@ -25,53 +27,6 @@ const markdownProcessor = unified()
   .use(rehypeHighlight)
   .use(rehypeKatex)
   .use(rehypeStringify);
-
-const readFile = (filePath: string) => fs.readFileSync(filePath, 'utf8');
-const writeFile = (filePath: string, data: string) => fs.writeFileSync(filePath, data);
-const getFileStats = (filePath: string) => fs.statSync(filePath);
-const fileExists = (filePath: string) => fs.existsSync(filePath);
-
-class PostCache {
-  private static async ensure() {
-    try {
-      const cacheDir = path.dirname(cacheFile);
-      if (!fileExists(cacheDir)) {
-        fs.mkdirSync(cacheDir, { recursive: true });
-      }
-      if (!fileExists(cacheFile)) {
-        fs.writeFileSync(cacheFile, '{}');
-      }
-      return true;
-    } catch (error) {
-        console.warn('Cache creation failed, using in-memory cache:', error);
-      return false;
-    }
-  }
-
-  static async get(): Promise<PostMetadataCache> {
-    const cacheExists = await this.ensure();
-    if (!cacheExists) {
-      return {};
-    }
-    try {
-      return JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
-    } catch {
-      return {};
-    }
-  }
-
-  static async update(id: string, metadata: PostMetadata): Promise<void> {
-    const cache = await this.get();
-    const stats = getFileStats(path.join(postsDirectory, `${id}.md`));
-    
-    cache[id] = {
-      ...metadata,
-      lastModified: format(stats.mtime.getTime(),POST_DATE_FORMAT),
-    };
-    
-    writeFile(cacheFile, JSON.stringify(cache, null, 2));
-  }
-}
 
 function calculateReadTime(content: string): string {
   const stripHtml = content.replace(/<[^>]*>/g, '');
@@ -93,48 +48,78 @@ async function processMarkdown(content: string): Promise<string> {
   return result.toString();
 }
 
-async function createPostMetadata(id: string, matterResult: matter.GrayMatterFile<string>, fileStats: fs.Stats): Promise<PostMetadata> {
+async function createPostMetadata(id: string, matterResult: matter.GrayMatterFile<string>): Promise<PostMetadata> {
   return {
     id,
     title: matterResult.data.title,
     date: format(matterResult.data.date, POST_DATE_FORMAT),
-    lastModified: format(fileStats.mtime.getTime(), POST_DATE_FORMAT),
     readTime: calculateReadTime(matterResult.content)
   };
 }
 
+export async function getPostData(id: string): Promise<PostData> {
+  try {
+    const redis = await getRedisClient();
+    const cacheKey = `blog-post-${id}`;
+
+    const cachedPost = await redis.get(cacheKey);
+    if (cachedPost) {
+      console.log(`${cacheKey} found in redis`)
+      return JSON.parse(cachedPost);
+    }
+    console.log(`${cacheKey} not found - reading from memory`)
+
+
+    const fullPath = path.join(postsDirectory, `${id}.md`);
+    const fileContents = await readFile(fullPath, 'utf-8');
+    const matterResult = matter(fileContents);
+    
+    const [metadata, contentHtml] = await Promise.all([
+      createPostMetadata(id, matterResult),
+      processMarkdown(matterResult.content)
+    ]);
+
+    const postData = { metadata, contentHtml };
+
+    await redis.set(cacheKey, JSON.stringify(postData), {
+      EX: REDIS_POST_TTL
+    });
+
+    return postData;
+  } catch (error) {
+    console.error(`Error getting post data for ${id}:`, error);
+    throw error;
+  }
+}
+
 export async function getAllPostMetadata(): Promise<PostMetadata[]> {
   try {
-    const fileNames = fs.readdirSync(postsDirectory);
-    const posts = await Promise.all(
+    const redis = await getRedisClient();
+    const cacheKey = `posts-metadata`
+    const cachedPostsMetadata = await redis.get(cacheKey);
+    if (cachedPostsMetadata) {
+      console.log(`${cacheKey} found in redis`)
+      return JSON.parse(cachedPostsMetadata);
+    }
+    console.log(`${cacheKey} not found - reading from memory`)
+
+    const fileNames = await readdir(postsDirectory, 'utf-8');
+    const postsMetadata = await Promise.all(
       fileNames.map(fileName => {
         const id = fileName.replace(/\.md$/, '');
         return getPostMetadata(id);
       })
     );
 
-    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const sortedPostsMetadata = postsMetadata.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    await redis.set(cacheKey, JSON.stringify(sortedPostsMetadata), {
+      EX: REDIS_POST_TTL
+    });
+    
+    return sortedPostsMetadata;
   } catch (error) {
     console.error('Error getting all post metadata:', error);
-    throw error;
-  }
-}
-
-export async function getPostData(id: string): Promise<PostData> {
-  try {
-    const fullPath = path.join(postsDirectory, `${id}.md`);
-    const fileContents = readFile(fullPath);
-    const matterResult = matter(fileContents);
-    const fileStats = getFileStats(fullPath);
-    
-    const [metadata, contentHtml] = await Promise.all([
-      createPostMetadata(id, matterResult, fileStats),
-      processMarkdown(matterResult.content)
-    ]);
-
-    return { metadata, contentHtml };
-  } catch (error) {
-    console.error(`Error getting post data for ${id}:`, error);
     throw error;
   }
 }
@@ -142,12 +127,10 @@ export async function getPostData(id: string): Promise<PostData> {
 export async function getPostMetadata(id: string): Promise<PostMetadata> {
   try {
     const fullPath = path.join(postsDirectory, `${id}.md`);
-    const fileContents = readFile(fullPath);
+    const fileContents = await readFile(fullPath, 'utf-8');
     const matterResult = matter(fileContents);
-    const fileStats = getFileStats(fullPath);
     
-    const metadata = await createPostMetadata(id, matterResult, fileStats);
-    await PostCache.update(id, metadata);
+    const metadata = await createPostMetadata(id, matterResult);
     
     return metadata;
   } catch (error) {

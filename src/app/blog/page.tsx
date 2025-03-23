@@ -10,7 +10,7 @@ import SessionCache from '@/lib/SessionCache';
 
 
 export default function Blog() {
-    const [posts, setPosts] = useState<PostMetadata[]>([]);
+    const [postMetadata, setPostMetadata] = useState<PostMetadata[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const POSTS_CACHE_KEY = 'blog-posts-metadata';
 
@@ -18,9 +18,10 @@ export default function Blog() {
         async function fetchPostsMetadata() {
             setLoading(true);
             try {
-                const cached = SessionCache.get<PostMetadata[]>(POSTS_CACHE_KEY);
-                if (cached) {
-                    setPosts(cached);
+                const cachedMetadata = SessionCache.get<PostMetadata[]>(POSTS_CACHE_KEY);
+                if (cachedMetadata) {
+                    console.log(`${POSTS_CACHE_KEY} found in session, skipping api call`)
+                    setPostMetadata(cachedMetadata);
                     setLoading(false);
                     return;
                 }
@@ -28,7 +29,7 @@ export default function Blog() {
                 const response = await fetch('/api/posts');
                 const data = await response.json();
 
-                setPosts(data);
+                setPostMetadata(data);
                 SessionCache.set(POSTS_CACHE_KEY, data);
             } catch (error) {
                 console.error('Error fetching posts:', error);
@@ -55,11 +56,11 @@ export default function Blog() {
                     />
                 </div>
             ) : (
-                posts.length === 0 ? (
+                postMetadata.length === 0 ? (
                     <p className="text-gray-900 dark:text-gray-400">Not a single post has been written yet 😰</p>
                 ) : (
                     <ul>
-                        {posts.map(({ id, title, date, readTime}) => (
+                        {postMetadata.map(({ id, title, date, readTime}) => (
                             <li key={id} className="mb-6">
                                 <Link 
                                     href={`/blog/${id}`} 
