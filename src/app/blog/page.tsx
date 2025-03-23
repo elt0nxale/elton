@@ -20,6 +20,7 @@ export default function Blog() {
             try {
                 const cachedMetadata = SessionCache.get<PostMetadata[]>(POSTS_CACHE_KEY);
                 if (cachedMetadata) {
+                    console.log(`${POSTS_CACHE_KEY} found in session, skipping api call`)
                     setPostMetadata(cachedMetadata);
                     setLoading(false);
                     return;

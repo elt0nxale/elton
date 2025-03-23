@@ -64,8 +64,11 @@ export async function getPostData(id: string): Promise<PostData> {
 
     const cachedPost = await redis.get(cacheKey);
     if (cachedPost) {
+      console.log(`${cacheKey} found in redis`)
       return JSON.parse(cachedPost);
     }
+    console.log(`${cacheKey} not found - reading from memory`)
+
 
     const fullPath = path.join(postsDirectory, `${id}.md`);
     const fileContents = await readFile(fullPath, 'utf-8');
@@ -95,8 +98,10 @@ export async function getAllPostMetadata(): Promise<PostMetadata[]> {
     const cacheKey = `posts-metadata`
     const cachedPostsMetadata = await redis.get(cacheKey);
     if (cachedPostsMetadata) {
+      console.log(`${cacheKey} found in redis`)
       return JSON.parse(cachedPostsMetadata);
     }
+    console.log(`${cacheKey} not found - reading from memory`)
 
     const fileNames = await readdir(postsDirectory, 'utf-8');
     const postsMetadata = await Promise.all(
