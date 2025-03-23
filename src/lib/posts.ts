@@ -1,3 +1,6 @@
+import { PostMetadata, PostData } from '@/types';
+import { getRedisClient } from './redis';
+import { WORDS_PER_MINUTE, SECONDS_PER_IMAGE, POST_DATE_FORMAT, REDIS_POST_TTL, postsDirectory } from '@/app/constants/posts';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
@@ -12,8 +15,7 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeKatex from 'rehype-katex';
 import rehypeStringify from 'rehype-stringify';
 import { format } from 'date-fns';
-import { PostMetadata, PostData } from '@/types';
-import { WORDS_PER_MINUTE, SECONDS_PER_IMAGE, POST_DATE_FORMAT, postsDirectory, cacheFile } from '@/app/constants/posts';
+
 
 const markdownProcessor = unified()
   .use(remarkParse)
@@ -57,25 +59,16 @@ async function createPostMetadata(id: string, matterResult: matter.GrayMatterFil
   };
 }
 
-export async function getAllPostMetadata(): Promise<PostMetadata[]> {
-  try {
-    const fileNames = fs.readdirSync(postsDirectory);
-    const posts = await Promise.all(
-      fileNames.map(fileName => {
-        const id = fileName.replace(/\.md$/, '');
-        return getPostMetadata(id);
-      })
-    );
-
-    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  } catch (error) {
-    console.error('Error getting all post metadata:', error);
-    throw error;
-  }
-}
-
 export async function getPostData(id: string): Promise<PostData> {
   try {
+    const redis = await getRedisClient();
+    const cacheKey = `blog-post-${id}`;
+
+    const cachedPost = await redis.get(cacheKey);
+    if (cachedPost) {
+      return JSON.parse(cachedPost);
+    }
+
     const fullPath = path.join(postsDirectory, `${id}.md`);
     const fileContents = readFile(fullPath);
     const matterResult = matter(fileContents);
@@ -85,9 +78,45 @@ export async function getPostData(id: string): Promise<PostData> {
       processMarkdown(matterResult.content)
     ]);
 
-    return { metadata, contentHtml };
+    const postData = { metadata, contentHtml };
+
+    await redis.set(cacheKey, JSON.stringify(postData), {
+      EX: REDIS_POST_TTL
+    });
+
+    return postData;
   } catch (error) {
     console.error(`Error getting post data for ${id}:`, error);
+    throw error;
+  }
+}
+
+export async function getAllPostMetadata(): Promise<PostMetadata[]> {
+  try {
+    const redis = await getRedisClient();
+    const cacheKey = `posts-metadata`
+    const cachedPostsMetadata = await redis.get(cacheKey);
+    if (cachedPostsMetadata) {
+      return JSON.parse(cachedPostsMetadata);
+    }
+
+    const fileNames = fs.readdirSync(postsDirectory);
+    const postsMetadata = await Promise.all(
+      fileNames.map(fileName => {
+        const id = fileName.replace(/\.md$/, '');
+        return getPostMetadata(id);
+      })
+    );
+
+    const sortedPostsMetadata = postsMetadata.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    await redis.set(cacheKey, JSON.stringify(sortedPostsMetadata), {
+      EX: REDIS_POST_TTL
+    });
+    
+    return sortedPostsMetadata;
+  } catch (error) {
+    console.error('Error getting all post metadata:', error);
     throw error;
   }
 }
