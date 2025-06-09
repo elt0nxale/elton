@@ -3,14 +3,13 @@ title: "I've graduated. What now?"
 date: "2025-01-19"
 ---
 
-Welcome to `/blog`, where i'd intended to put down what i find interesting into words. 
-
-Ideally it'd be a culmination of knowledge i wish to reference from time to time, but it pays to start this off with a little more personal touch.
+Welcome to `/blog`, where my intention is to put down what i find interesting into words. Ideally it'd be a culmination of knowledge i wish to reference from time to time, but it pays to start this off with a little more personal touch.
 
 ### Arrival Disorientation
-> how do you describe the feeling where you knew you always wanted to reach there but when you finally did, you feel lost
+Had this on my mind for awhile now.
+> how do you describe the feeling where you knew you always wanted to reach there but when you finally did, you feel lost?
 
-Chatgpt says that 💭 
+Chatgpt says:
 
 > this feeling can be described as 'arrival disorientation' - a sense of emptiness after achieving something you always wanted. It's a bittersweet mix of fulfilment and loss, where the drive that propelled you forward suddenly dissipates, leaving a void. 
 > This feeling often stems from: 
@@ -20,26 +19,31 @@ Chatgpt says that 💭
 > It's common, and reflecting on new aspirations or deeper purposes often helps to reignite that sense of direction.  
 
 
-I've never bothered so much about this feeling, but at the same time i have never come to realise what causes it, and what could come out of this feeling.
+This has never bothered me that much, but at the same time i've never come to realise what causes it.
 
-Well, atleast the last line of response was re-assuring. I think a large part stems from the uncertainty of what the future is going to be like. *Is this the job i wanted? How's my boss going to be? How will this decision affect my career trajectory? *
+Well, atleast the last line of response was re-assuring. I think a large part stems from the uncertainty of what the future is going to be like post-graduation.
 
 
-### Building this 
-Writing this at 1.29am 😴 but only half satisfied with how it turned out. Given that this is entirely in js/html/css, a ton of time was spent greasing frontend gears that probably never really ran since my frontend internship 2 years ago. Also a huge portion of time was spent figuring out how this site should turn out, and yes there was no wireframe or plan involved.
+### Doing this 
+Writing this at 1.29am but only half as much satisfied with how it turned out. Given that this is fundamentally in js/html/css, a ton of time was spent greasing frontend gears (that probably never really ran since i did it in an internship 2 years ago). 
 
-This is a list of things i was trying to achieve (in decreasing order of importance):
+Also, a huge portion of time was spent figuring out how this site should turn out. And yes there was no wireframe or plan whatsoever.
+
+This is a list of things i was trying to achieve (of decreasing importance):
 1. Make it easy to update the blog. 
-   > *With [nextjs dynamic routes](https://nextjs.org/docs/pages/building-your-application/routing/dynamic-routes) and [remark](https://github.com/remarkjs/remark) markdown parsing, i basically only need to write my content in .md and the ci/cd does its job*
+   
+   *nextjs [dynamic routes](https://nextjs.org/docs/pages/building-your-application/routing/dynamic-routes) and [remark](https://github.com/remarkjs/remark) markdown parsing, i basically only need to write my content in .md and the ci/cd does its job*
 2. Cut out fancy animation and (try to) minimise the amount of cognitive load. 
-   > *I firmly believe there's a limit to how many words you can read a day and because of that there should be an **efficient** use of text/ elements here.* 
+   
+   *firm believer of there being a limit to how many words you can read a day and because of that there should be an **efficient** use of text/ elements here*
 3. Viewing width should be functional. 
-   > *Adobe acrobat reader doesnt bombard your eyes with text spanning the entire window just because your monitor is that wide. I also wanted to make it feel like you're accessing this from an ipad on focused mode*
+   
+   *Adobe acrobat reader doesnt bombard your eyes with text spanning the entire window just because your monitor is that wide. Wanted replicate it through this layout somehow*
 
 
 This workaround seems to be enough so far, until markdown becomes a hassle to write..then we can probably look into converters. 
 
-Anyway, if you're reading this, thank you for being part of the 🚥 site traffic. Feel free to give me feedback via socials 📭
+Anyway, if you're reading this, thank you for being part of the 🚥 site traffic. Feel free to reach out if you catch bugs or have feedback
    
 
 
