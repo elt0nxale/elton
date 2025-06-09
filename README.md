@@ -8,26 +8,28 @@ Wanted a site for myself on the internet mainly to:
 
 ## Features
 - Markdown-based blog posts
-- Server-side caching to reduce file system reads and markdown processing
+- Server-side caching to minimise file system reads and markdown processing
 - Server-side rendering
 - Client-side caching of blog posts using sessionStorage
 - Responsive layouts
 - Accessibiity optimised
 
-## Tech Stack
-- Next.js 14
+## Stack
+- Next.js
 - TypeScript
 - Tailwind CSS
 - Markdown Processing (remark, rehype)
+- Centralized Redis cache
 
 ## Project Structure
 ```
+posts
+└── *.md # Markdown blog posts 
 src
-├── app/# Next.js pages 
+├── app/ # Next.js pages 
 ├── components/ # Reusable components 
-├── contexts/ # React contexts (theme) 
-├── lib/ # Utilities 
-├── posts/ # Markdown blog posts 
+├── contexts/ # Themes
+├── lib/ # Utils
 └── types/ # TypeScript definitions
 ```
 
@@ -57,4 +59,6 @@ Content here...
 ```
 
 ## Deployment
-Deployed on Vercel with continuous deployment from main branch.
+- Continuous deployment (because this is the only place where this can be done)
+- Hosted on Vercel (free things)
+- CI/CD workflow does some accessibility checks using lighthouse
