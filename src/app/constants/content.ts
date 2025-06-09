@@ -1,5 +1,15 @@
 export const experiences = [
     {
+        title: 'Site Reliability Engineer',
+        company: 'Apple',
+        tools: ['Kubernetes','Linux','Splunk','Grafana','Kafka','Cassandra','Python','Java','TypeScript'],
+        description: [
+              "Building more reliable platform services used across orgs",
+              "Maintaining them",
+              "Developing tools to maintain them",
+        ],
+    },
+    {
         title: 'Winter Analyst',
         company: 'Millennium Management LLC',
         tools: ['Angular', 'Spring Boot','Java','PostgreSQL','EKS','S3'],
