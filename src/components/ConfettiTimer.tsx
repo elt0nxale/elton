@@ -2,23 +2,21 @@
 
 import { useCallback, useRef } from 'react';
 import confetti from 'canvas-confetti';
-
+import { DEBOUNCE_DELAY } from '@/app/constants/posts';
 interface ConfettiTimerProps {
   seconds: number;
   word: string;
 }
 
 export function ConfettiTimer({ seconds, word }: ConfettiTimerProps) {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastCalledRef = useRef<number>(0);
-  const DEBOUNCE_DELAY = 1000;
 
   const fireConfetti = useCallback(() => {
     const now = Date.now();
     if (now - lastCalledRef.current < DEBOUNCE_DELAY) return;
 
     lastCalledRef.current = now;
-    
+
     confetti({
       particleCount: 100,
       spread: 70,

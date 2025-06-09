@@ -13,3 +13,6 @@ export const REDIS_POST_TTL = 60 * 60 * 24 * 3; // seconds
 export const SESSION_POST_TTL = 60 * 60 * 1000; // milliseconds
 export const CDN_POST_TTL = 600; // minutes 
 export const CDN_POST_STALE_WHILE_REVALIDATE_TTL = 200; // minutes 
+
+// DEBOUNCE
+export const DEBOUNCE_DELAY = 1000;
