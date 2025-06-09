@@ -1,14 +1,22 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import confetti from 'canvas-confetti';
-
+import { DEBOUNCE_DELAY } from '@/app/constants/posts';
 interface ConfettiTimerProps {
   seconds: number;
+  word: string;
 }
 
-export function ConfettiTimer({ seconds }: ConfettiTimerProps) {
+export function ConfettiTimer({ seconds, word }: ConfettiTimerProps) {
+  const lastCalledRef = useRef<number>(0);
+
   const fireConfetti = useCallback(() => {
+    const now = Date.now();
+    if (now - lastCalledRef.current < DEBOUNCE_DELAY) return;
+
+    lastCalledRef.current = now;
+
     confetti({
       particleCount: 100,
       spread: 70,
@@ -21,7 +29,7 @@ export function ConfettiTimer({ seconds }: ConfettiTimerProps) {
       className="relative group" 
       onMouseEnter={fireConfetti}
     >
-      <u>recently</u>
+      <u>{word}</u>
       <span 
         className="absolute bottom-full transform -translate-x-1/2 w-max px-3 py-2 text-sm 
                    text-white bg-black rounded opacity-0 group-hover:opacity-100 

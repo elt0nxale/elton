@@ -28,14 +28,14 @@ export default function Homepage() {
                     </div>
                 </div>
                 <p className={paragraphClasses}>
-                    Hey 👋 I&apos;ve <ConfettiTimer seconds={seconds}/> completed my bachelor&apos;s in Information Systems in 3.5 years and about to start my full-time role (yay).
+                    Hey 👋 I&apos;ve <ConfettiTimer word={"recently"} seconds={seconds}/> completed my bachelor&apos;s in Information Systems and jumped right into a full-time role (yay).
                 </p>
                 <p className={paragraphClasses}>
                     Graduating early was always a priority for me because
                 </p>
                 <ol className="mt-6 text-lg leading-8 text-gray-700 dark:text-gray-400 text-start list-decimal list-inside">
                     <li>School fees are <b>expensive</b>.</li>
-                    <li>Internships in my opinion provided a more practical learning experience rather than over-emphasizing on superficial measures.</li>
+                    <li>Internships gave a more practical learning experience rather than over-emphasizing on superficial measures.</li>
                 </ol>
                 <p className={paragraphClasses}>
                     p.s my github grassfields haven&apos;t been watered enough the past year or so — I&apos;d like to apologize to myself for that... and also conveniently slide in the excuse of having too many things going on outside of the keyboard.
