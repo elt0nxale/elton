@@ -2,7 +2,7 @@ export const experiences = [
     {
         title: 'Site Reliability Engineer',
         company: 'Apple',
-        tools: ['Kubernetes','Linux','Splunk','Grafana','Kafka','Cassandra','Python','Java','TypeScript'],
+        tools: ['Kubernetes','Linux','Splunk','Grafana','Kafka','Cassandra','Python','Java'],
         description: [
               "Building more reliable platform services used across orgs",
               "Maintaining them",
