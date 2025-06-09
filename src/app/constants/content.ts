@@ -20,7 +20,7 @@ export const experiences = [
     },
     {
         title: 'Software Engineer Intern',
-        company: 'GIC - Public Markets Data',
+        company: 'GIC (Public Markets Data)',
         tools: ['Angular', 'Spring Boot','Java','PostgreSQL','Openshift'],
         description: [
                 "Built self-service data management and data quality reporting solutions for the reference data team with the goal of automating manual processes",
@@ -38,7 +38,7 @@ export const experiences = [
       },
       {
         title: 'Software Engineer Intern',
-        company: 'GIC - Fixed Income & Multi-Assets',
+        company: 'GIC (Fixed Income & Multi-Assets)',
         tools: ['Angular', 'Spring Boot','Java','PostgreSQL','Openshift','Docker'],
         description: [
               "Collaborated with quants to implement analytical dashboards and a workflow automation tool utilised by portfolio managers",
