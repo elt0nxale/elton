@@ -11,7 +11,7 @@ export const experiences = [
     },
     {
         title: 'Winter Analyst',
-        company: 'Millennium Management LLC',
+        company: 'Millennium',
         tools: ['Angular', 'Spring Boot','Java','PostgreSQL','EKS','S3'],
         description: [
               "Built event-driven data processing solutions for the core data team to monitor resource usage, interfacing legacy and modern systems",
