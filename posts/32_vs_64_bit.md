@@ -1,4 +1,7 @@
-# The tale of the 32-bit
+---
+title: "The tale of the 32-bit"
+date: "2025-08-26"
+---
 
 ### Childhood Mystery
 
