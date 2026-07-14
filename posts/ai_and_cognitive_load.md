@@ -48,9 +48,6 @@ This begs the question, how can i do a better job at ensuring the loop goes on? 
 As someone who dislikes spending excessive time on tool-maxxing, i'm pretty sure this is just scratching the surface. More importantly, it would be pragmatic if i devote more time to better handle this gap, since the human bottleneck will inevitably remain in the way until we achieve AGI sometime in the future.
 
 
-
-#### Footnotes:
-
 [^yochi]: for the less informed, it's an australian froyo franchise that somehow has a long queue everytime you walk past it at Orchard
 [^semantic_memory]: deals with storing and retrieving facts, meanings, and concepts rather than exact keyword matches 
 [^tools]: Mem0 is cloud-first API that specializes in remembering info about users while Mnemon is an LLM-supervised, local binary for graph-based agent memory powered by SQLite.        
