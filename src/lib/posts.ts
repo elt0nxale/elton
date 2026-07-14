@@ -77,10 +77,12 @@ export async function getAllPostMetadata(): Promise<PostMetadata[]> {
   try {
     const fileNames = await readdir(postsDirectory, 'utf-8');
     const postsMetadata = await Promise.all(
-      fileNames.map(fileName => {
-        const id = fileName.replace(/\.md$/, '');
-        return getPostMetadata(id);
-      })
+      fileNames
+        .filter(fileName => fileName.endsWith('.md'))
+        .map(fileName => {
+          const id = fileName.replace(/\.md$/, '');
+          return getPostMetadata(id);
+        })
     );
 
     const sortedPostsMetadata = postsMetadata.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
