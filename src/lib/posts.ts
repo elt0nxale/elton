@@ -1,4 +1,4 @@
-import { POST_DATE_FORMAT, REDIS_POST_TTL, SECONDS_PER_IMAGE, WORDS_PER_MINUTE, postsDirectory } from '@/app/constants/posts';
+import { POST_DATE_FORMAT, SECONDS_PER_IMAGE, WORDS_PER_MINUTE, postsDirectory } from '@/app/constants/posts';
 import { PostData, PostMetadata } from '@/types';
 import { format } from 'date-fns';
 import { readFile, readdir } from 'fs/promises';
@@ -14,8 +14,6 @@ import remarkMath from 'remark-math';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
-import { getRedisClient } from './redis';
-
 
 const markdownProcessor = unified()
   .use(remarkParse)
@@ -59,17 +57,6 @@ async function createPostMetadata(id: string, matterResult: matter.GrayMatterFil
 
 export async function getPostData(id: string): Promise<PostData> {
   try {
-    const redis = await getRedisClient();
-    const cacheKey = `blog-post-${id}`;
-
-    const cachedPost = await redis.get(cacheKey);
-    if (cachedPost) {
-      console.log(`${cacheKey} found in redis`)
-      return JSON.parse(cachedPost);
-    }
-    console.log(`${cacheKey} not found - reading from memory`)
-
-
     const fullPath = path.join(postsDirectory, `${id}.md`);
     const fileContents = await readFile(fullPath, 'utf-8');
     const matterResult = matter(fileContents);
@@ -79,13 +66,7 @@ export async function getPostData(id: string): Promise<PostData> {
       processMarkdown(matterResult.content)
     ]);
 
-    const postData = { metadata, contentHtml };
-
-    await redis.set(cacheKey, JSON.stringify(postData), {
-      EX: REDIS_POST_TTL
-    });
-
-    return postData;
+    return { metadata, contentHtml };
   } catch (error) {
     console.error(`Error getting post data for ${id}:`, error);
     throw error;
@@ -94,15 +75,6 @@ export async function getPostData(id: string): Promise<PostData> {
 
 export async function getAllPostMetadata(): Promise<PostMetadata[]> {
   try {
-    const redis = await getRedisClient();
-    const cacheKey = `posts-metadata`
-    const cachedPostsMetadata = await redis.get(cacheKey);
-    if (cachedPostsMetadata) {
-      console.log(`${cacheKey} found in redis`)
-      return JSON.parse(cachedPostsMetadata);
-    }
-    console.log(`${cacheKey} not found - reading from memory`)
-
     const fileNames = await readdir(postsDirectory, 'utf-8');
     const postsMetadata = await Promise.all(
       fileNames.map(fileName => {
@@ -113,10 +85,6 @@ export async function getAllPostMetadata(): Promise<PostMetadata[]> {
 
     const sortedPostsMetadata = postsMetadata.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    await redis.set(cacheKey, JSON.stringify(sortedPostsMetadata), {
-      EX: REDIS_POST_TTL
-    });
-    
     return sortedPostsMetadata;
   } catch (error) {
     console.error('Error getting all post metadata:', error);
