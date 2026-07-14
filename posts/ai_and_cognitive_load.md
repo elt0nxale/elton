@@ -17,7 +17,7 @@ The advances in AI in the past year (i.e. RAG, agentic AI, MCPs, harness enginee
 
 In recent sessions, i've made it an attempt to keep up with the changes Claude is making to be more in touch with the repository, even assigning shortcuts to toggle git line changes and installing extensions to organize them in a way that's easy to digest. Unfortunately, i found the bottleneck in this development loop to be myself. Digesting them takes up so much mental effort that i often get drained quicker than i'd imagined. The frustration it brought reminded me of the following point of the article - [cognitive load](https://github.com/zakirullin/cognitive-load)
 
-![alt text](cognitive_load_illustration.png)
+![alt text](/posts/cognitive_load_illustration.png)
 
 ### Theory Of Constraint
 
