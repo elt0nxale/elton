@@ -5,7 +5,7 @@ date: "2026-07-14"
 
 ### Pairing with AI
 
-> "Code is read more often than it is written". 
+> Code is read more often than it is written.
 
 This line immediately comes to mind when someone talks about the book - Clean Code. Indeed as it has emphasized, developers have long spent more time reading and digesting each line of code rather than writing new ones. This was the norm for decades, until now. In 2022, when i was in my second year of university, chatgpt was released and i remember how it reached over 1 million users in 5days. Though it didn't change the primitive use of VSC as a code editor, it augmented the way i looked for answers. Of course, i could also google "how do i check for duplicate installations of python on my mac", and scan through 3 or 4 Stack Overflow threads before i find a crowd upvoted answer and went at it. But what it augmented was the effort it took to find a *relevant* answer (with relevancy being closely tied to attention mechanisms). Correctness, on the other hand, is a different story. 
 
