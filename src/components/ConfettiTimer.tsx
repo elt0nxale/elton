@@ -4,11 +4,11 @@ import { useCallback, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import { DEBOUNCE_DELAY } from '@/app/constants/posts';
 interface ConfettiTimerProps {
-  seconds: number;
+  days: number;
   word: string;
 }
 
-export function ConfettiTimer({ seconds, word }: ConfettiTimerProps) {
+export function ConfettiTimer({ days, word }: ConfettiTimerProps) {
   const lastCalledRef = useRef<number>(0);
 
   const fireConfetti = useCallback(() => {
@@ -35,7 +35,7 @@ export function ConfettiTimer({ seconds, word }: ConfettiTimerProps) {
                    text-white bg-black rounded opacity-0 group-hover:opacity-100 
                    transition-all duration-300 delay-500"
       >
-        {seconds} secs ago
+        {days} days ago
       </span>
     </em>
   );

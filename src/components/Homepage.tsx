@@ -9,11 +9,11 @@ const paragraphClasses = "mt-6 text-lg leading-8 text-gray-900 dark:text-gray-30
 
 export default function Homepage() {
     const graduationDate = new Date('2024-12-02 15:00');
-    const [seconds, setSeconds] = useState(Math.floor((Date.now() - graduationDate.getTime()) / 1000));
+    const [days, setDays] = useState(Math.floor((Date.now() - graduationDate.getTime()) / (1000 * 60 * 60 * 24)));
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setSeconds(prevSeconds => prevSeconds + 1);
+            setDays(prevSeconds => prevSeconds + 1);
         }, 1000);
         return () => clearInterval(interval);
     }, []);
@@ -28,20 +28,20 @@ export default function Homepage() {
                     </div>
                 </div>
                 <p className={paragraphClasses}>
-                    Hey 👋 I&apos;ve <ConfettiTimer word={"recently"} seconds={seconds}/> completed my bachelor&apos;s in Information Systems and jumped right into a full-time role (yay).
+                    Hey 👋 I completed my bachelor&apos;s in Information Systems <ConfettiTimer word={"some time ago"} days={days}/> and have started to embrace the 9-5 lifestyle.
                 </p>
                 <p className={paragraphClasses}>
-                    Graduating early was always a priority for me because
+                    While in university, graduating early was always a priority for me because
                 </p>
                 <ol className="mt-6 text-lg leading-8 text-gray-700 dark:text-gray-400 text-start list-decimal list-inside">
                     <li>School fees are <b>expensive</b>.</li>
                     <li>Internships gave a more practical learning experience rather than over-emphasizing on superficial measures.</li>
                 </ol>
                 <p className={paragraphClasses}>
-                    p.s my github grassfields haven&apos;t been watered enough the past year or so — I&apos;d like to apologize to myself for that... and also conveniently slide in the excuse of having too many things going on outside of the keyboard.
+                    Unfortunately, my github grassfields still haven&apos;t been watered enough since starting fulltime — I&apos;d like to apologize to myself for the lack of discipline... and also conveniently slide in the excuse of having too much going on outside of the keyboard. 
                 </p>
                 <p className={paragraphClasses}>
-                    Now that there&apos;s more time without school commitments, I&apos;d like to better spend it on things like updating my <Link href="/blog" className="underline font-bold">blog</Link>, poking around cool stuff, and officially embark on autodidacticism.
+                    Presumably with more time without academic commitments and a fixed work schedule, I&apos;d hope to spend more time on reading, writing this <Link href="/blog" className="underline font-bold">blog</Link>, and learn to become an autodidact. 
                 </p>
             </div>
         </Layout>
