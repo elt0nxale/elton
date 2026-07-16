@@ -19,7 +19,6 @@ Wanted a site for myself on the internet mainly to:
 - TypeScript
 - Tailwind CSS
 - Markdown Processing (remark, rehype)
-- Centralized Redis cache
 
 ## Project Structure
 ```
